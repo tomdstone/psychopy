@@ -7,15 +7,15 @@ import psychopy.logging as logging
 
 try:
     from psychopy_eyetracker_sr_research.sr_research.eyelink.eyetracker import (
-        start_eyelink, 
+        start_eyelink,
         stop_eyelink,
-        EyeTracker, 
+        EyeTracker,
         MonocularEyeSampleEvent,
-        BinocularEyeSampleEvent, 
+        BinocularEyeSampleEvent,
         FixationStartEvent,
-        FixationEndEvent, 
+        FixationEndEvent,
         SaccadeStartEvent,
-        SaccadeEndEvent, 
+        SaccadeEndEvent,
         BlinkStartEvent,
         BlinkEndEvent,
         _eyeLinkCalibrationResultDict,
