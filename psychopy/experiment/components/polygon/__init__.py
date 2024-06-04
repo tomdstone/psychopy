@@ -40,8 +40,7 @@ class PolygonComponent(BaseVisualComponent):
         self.type = 'Polygon'
         self.url = "https://www.psychopy.org/builder/components/polygon.html"
         self.exp.requirePsychopyLibs(['visual'])
-        self.order += ['shape', 'nVertices',  # Basic tab
-                      ]
+        self.order += ['shape', 'nVertices']  # Basic tab
         self.order.insert(self.order.index("borderColor"), "lineColor")
         self.depends = [  # allows params to turn each other off/on
             {"dependsOn": "shape",  # must be param name
@@ -122,7 +121,6 @@ class PolygonComponent(BaseVisualComponent):
             updates='constant', allowedUpdates=[], direct=False,
             hint=msg,
             label=_translate("Interpolate"))
-
 
         self.params['size'].hint = _translate(
             "Size of this stimulus [w,h]. Note that for a line only the "
@@ -240,7 +238,8 @@ class PolygonComponent(BaseVisualComponent):
         elif vertices in ['triangle', '3']:
             code = ("{name} = new visual.ShapeStim ({{\n"
                     "  win: psychoJS.window, name: '{name}', {unitsStr}\n"
-                    "  vertices: [[-{size}[0]/2.0, -{size}[1]/2.0], [+{size}[0]/2.0, -{size}[1]/2.0], [0, {size}[1]/2.0]],\n")
+                    "  vertices: [[-{size}[0]/2.0, -{size}[1]/2.0],"
+                    "[+{size}[0]/2.0, -{size}[1]/2.0], [0, {size}[1]/2.0]],\n")
         elif vertices in ['rectangle', '4']:
             code = ("{name} = new visual.Rect ({{\n"
                     "  win: psychoJS.window, name: '{name}', {unitsStr}\n"
@@ -279,20 +278,19 @@ class PolygonComponent(BaseVisualComponent):
         code += ("  ori: {ori}, pos: {pos},\n"
                  "  anchor: {anchor},\n"
                  "  lineWidth: {lineWidth}, \n"
-                 "  colorSpace: {colorSpace},\n")      
+                 "  colorSpace: {colorSpace},\n")
 
         if inits['lineColor'] == 'undefined':
-            code +=  "  lineColor: {lineColor},\n"
-        else:    
-            code +=  "  lineColor: new util.Color({lineColor}),\n"
+            code += "  lineColor: {lineColor},\n"
+        else:
+            code += "  lineColor: new util.Color({lineColor}),\n"
 
         if inits['fillColor'] == 'undefined':
-            code +=  "  fillColor: {fillColor},\n"
-        else:    
-            code +=  "  fillColor: new util.Color({fillColor}),\n"
+            code += "  fillColor: {fillColor},\n"
+        else:
+            code += "  fillColor: new util.Color({fillColor}),\n"
 
-
-        code += (        "  fillColor: {fillColor},\n"
+        code += ("  fillColor: {fillColor},\n"
                  "  opacity: {opacity}, depth: {depth}, interpolate: {interpolate},\n"
                  "}});\n\n")
 
