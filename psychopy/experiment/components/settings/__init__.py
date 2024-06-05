@@ -141,7 +141,7 @@ class SettingsComponent:
         self.depends = []
         self.order = [
                       'Audio lib', 'Audio latency priority', "Force stereo",  # Audio tab
-                      'HTML path', 'exportHTML', 'Completed URL', 'Incomplete URL', 'End Message', 'Resources',  # Online tab
+                      'HTML path', 'exportHTML', 'Completed URL', 'Incomplete URL', 'End Message', 'Resources',  # Online tab  # noqa: E501
                       ]
         self.depends = []
 
@@ -381,7 +381,8 @@ class SettingsComponent:
             '3', valType='str', inputType="choice",
             allowedVals=['0', '1', '2', '3', '4'],
             allowedLabels=audioLatencyLabels,
-            hint=_translate("How important is audio latency for you? If essential then you may need to get all your sounds in correct formats."),
+            hint=_translate("How important is audio latency for you? If essential then you "
+                            "may need to get all your sounds in correct formats."),
             label=_translate("Audio latency priority"), categ='Audio')
 
         # --- Data params ---
@@ -407,7 +408,8 @@ class SettingsComponent:
         self.params['Data file delimiter'] = Param(
             savedDataDelim, valType='str', inputType="choice",
             allowedVals=['auto', 'comma', 'semicolon', 'tab'],
-            hint=_translate("What symbol should the data file use to separate columns? ""Auto"" will select a delimiter automatically from the filename."),
+            hint=_translate("What symbol should the data file use to separate columns? ""Auto"" will"
+                            "select a delimiter automatically from the filename."),
             label=_translate("Data file delimiter"), categ='Data'
         )
         self.params['sortColumns'] = Param(
@@ -554,7 +556,7 @@ class SettingsComponent:
             label=_translate("Eyetracker device"), categ="Eyetracking"
         )
 
-        #mousegaze
+        # mousegaze
         self.params['mgMove'] = Param(
             mgMove, valType='str', inputType="choice",
             allowedVals=['CONTINUOUS', 'LEFT_BUTTON', 'MIDDLE_BUTTON', 'RIGHT_BUTTON'],
@@ -835,7 +837,7 @@ class SettingsComponent:
                 newDict = eval(re.sub(pattern, entryToString, infoStr))
             except SyntaxError:  # still a syntax error, possibly caused by user
                 msg = ('Builder Expt: syntax error in '
-                              '"Experiment info" settings (expected a dict)')
+                       '"Experiment info" settings (expected a dict)')
                 logging.error(msg)
                 raise AttributeError(msg)
         return newDict
@@ -973,7 +975,7 @@ class SettingsComponent:
         )
         for key, value in expInfo.items():
             code += (
-            f"    '{key}': {value},\n"
+                f"    '{key}': {value},\n"
             )
         code += (
             "}\n"
@@ -1057,7 +1059,7 @@ class SettingsComponent:
         if 'email' in self.params:
             email = repr(self.params['email'].val)
         else:
-            email = "''"
+            email = "''"  # noqa: F841
         # populate resources folder
         resFolder = join(folder, 'resources')
         if not os.path.isdir(resFolder):
@@ -1103,8 +1105,8 @@ class SettingsComponent:
         # Write header comment
         starLen = "*"*(len(jsFilename) + 9)
         code = ("/%s \n"
-               " * %s *\n"
-               " %s/\n\n")
+                " * %s *\n"
+                " %s/\n\n")
         buff.writeIndentedLines(code % (starLen, jsFilename.title(), starLen))
 
         # Write imports if modular
@@ -1138,8 +1140,6 @@ class SettingsComponent:
         buff.writeIndentedLines(code)
 
     def writeExpSetupCodeJS(self, buff, version):
-
-
         # write the code to set up experiment
         buff.setIndentLevel(0, relative=False)
         template = readTextFile("JS_setupExp.tmpl")
@@ -1241,7 +1241,7 @@ class SettingsComponent:
                 params['dataDir'] = repr(self.exp.prefsBuilder['savedDataFolder'].strip())
 
         code = (
-            "\n"
+            "\n"  # noqa: F541
             "# data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc\n"
             f"if dataDir is None:\n"
             f"    dataDir = %(dataDir)s\n"
@@ -1269,7 +1269,7 @@ class SettingsComponent:
         if isinstance(colPriority, str):
             try:
                 colPriority = ast.literal_eval(colPriority)
-            except:
+            except:  # noqa: E722
                 raise ValueError(_translate(
                     "Could not interpret value as dict: {}"
                 ).format(colPriority))
@@ -1659,12 +1659,12 @@ class SettingsComponent:
             # Start server
             if self.params['Save hdf5 file'].val:
                 code = (
-                    f"ioServer = io.launchHubServer(window=win, experiment_code=%(expName)s, session_code=ioSession, "
-                    f"datastore_name=thisExp.dataFileName, **ioConfig)\n"
+                    f"ioServer = io.launchHubServer(window=win, experiment_code=%(expName)s, "  # noqa: F541
+                    f"session_code=ioSession, datastore_name=thisExp.dataFileName, **ioConfig)\n"
                 )
             else:
                 code = (
-                    f"ioServer = io.launchHubServer(window=win, **ioConfig)\n"
+                    f"ioServer = io.launchHubServer(window=win, **ioConfig)\n"  # noqa: F541
                 )
             buff.writeIndentedLines(code % inits)
         else:
@@ -1819,17 +1819,17 @@ class SettingsComponent:
         # do/skip frame rate measurement according to params
         if self.params['measureFrameRate']:
             code = (
-            "if expInfo is not None:\n"
-            "    # get/measure frame rate if not already in expInfo\n"
-            "    if win._monitorFrameRate is None:\n"
-            "        win.getActualFrameRate(infoMsg=%(frameRateMsg)s)\n"
-            "    expInfo['frameRate'] = win._monitorFrameRate\n"
+                "if expInfo is not None:\n"
+                "    # get/measure frame rate if not already in expInfo\n"
+                "    if win._monitorFrameRate is None:\n"
+                "        win.getActualFrameRate(infoMsg=%(frameRateMsg)s)\n"
+                "    expInfo['frameRate'] = win._monitorFrameRate\n"
             )
             buff.writeIndentedLines(code % params)
         elif self.params['frameRate']:
             code = (
-            "if expInfo is not None:\n"
-            "    expInfo['frameRate'] = %(frameRate)s\n"
+                "if expInfo is not None:\n"
+                "    expInfo['frameRate'] = %(frameRate)s\n"
             )
             buff.writeIndentedLines(code % params)
 
@@ -1980,9 +1980,9 @@ class SettingsComponent:
         )
         if self.params['Enable Escape'].val:
             code += (
-            "    # check for quit (typically the Esc key)\n"
-            "    if defaultKeyboard.getKeys(keyList=['escape']):\n"
-            "        endExperiment(thisExp, win=win)\n"
+                "    # check for quit (typically the Esc key)\n"
+                "    if defaultKeyboard.getKeys(keyList=['escape']):\n"
+                "        endExperiment(thisExp, win=win)\n"
             )
         code += (
             "    # flip the screen\n"
@@ -2044,7 +2044,7 @@ class SettingsComponent:
         )
         if self.params['Save log file'].val:
             code += (
-            "logging.flush()\n"
+                "logging.flush()\n"
             )
         buff.writeIndentedLines(code)
         # Exit function def
@@ -2083,7 +2083,7 @@ class SettingsComponent:
         )
         if self.params['Save log file'].val:
             code += (
-            "logging.flush()\n"
+                "logging.flush()\n"
             )
         code += (
             "if thisSession is not None:\n"
@@ -2100,11 +2100,11 @@ class SettingsComponent:
         """Write some general functions that might be used by any Scheduler/object"""
 
         recordLoopIterationFunc = ("\nfunction importConditions(currentLoop) {\n"
-                    "  return async function () {\n"
-                    "    psychoJS.importAttributes(currentLoop.getCurrentTrial());\n"
-                    "    return Scheduler.Event.NEXT;\n"
-                    "    };\n"
-                    "}\n")
+                                   "  return async function () {\n"
+                                   "    psychoJS.importAttributes(currentLoop.getCurrentTrial());\n"
+                                   "    return Scheduler.Event.NEXT;\n"
+                                   "    };\n"
+                                   "}\n")
         buff.writeIndentedLines(recordLoopIterationFunc)
         code = (
             "\n"
