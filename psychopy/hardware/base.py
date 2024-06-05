@@ -162,7 +162,7 @@ class BaseResponseDevice(BaseDevice):
         # list to store responses in
         self.responses = []
         # indicator to mute outside of registered apps
-        self.muteOutsidePsychopy = False 
+        self.muteOutsidePsychopy = False
 
     def dispatchMessages(self):
         """
@@ -240,7 +240,7 @@ class BaseResponseDevice(BaseDevice):
         # try to dispatch messages
         try:
             self.dispatchMessages()
-        except:
+        except:  # noqa: E722
             pass
         # clear resp list
         self.responses = []
@@ -318,6 +318,7 @@ class BaseResponseDevice(BaseDevice):
         self.listeners = []
 
         return True
+
 
 if __name__ == "__main__":
     pass
