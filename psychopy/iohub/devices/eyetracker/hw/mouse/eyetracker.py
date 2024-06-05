@@ -408,8 +408,8 @@ class EyeTracker(EyeTrackerDevice):
         cal_run = calibration.runCalibration()
         calibration.window.close()
 
-        # NOTE - The following line has been commented out to prevent ioHub from 
-        # losing keyboard input after the window is closed. The new keyboard 
+        # NOTE - The following line has been commented out to prevent ioHub from
+        # losing keyboard input after the window is closed. The new keyboard
         # input system does not require this call anymore.
         # calibration._unregisterEventMonitors()
         calibration.clearAllEventBuffers()
