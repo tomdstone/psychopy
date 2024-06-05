@@ -6,8 +6,8 @@
 import psychopy.logging as logging
 
 try:
-    from psychopy_eyetracker_sr_research.sr_research.eyelink import (
-        FixationTarget, 
+    from psychopy_eyetracker_sr_research.sr_research.eyelink import (  # noqa: F401
+        FixationTarget,
         BlankScreen,
         TextLine,
         IntroScreen,

@@ -6,7 +6,7 @@
 import psychopy.logging as logging
 
 try:
-    from psychopy_eyetracker_sr_research.sr_research.eyelink.eyetracker import (
+    from psychopy_eyetracker_sr_research.sr_research.eyelink.eyetracker import (  # noqa: F401
         start_eyelink,
         stop_eyelink,
         EyeTracker,
