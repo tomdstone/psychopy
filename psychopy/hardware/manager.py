@@ -9,8 +9,8 @@
 # Distributed under the terms of the GNU General Public License (GPL).
 
 __all__ = [
-    'deviceManager', 
-    'getDeviceManager', 
+    'deviceManager',
+    'getDeviceManager',
     'DeviceManager',
     'closeAllDevices'
 ]
@@ -66,7 +66,7 @@ class DeviceManager:
     can be used to access devices such as microphones, button boxes, and cameras though a common
     interface. It can also be used to get information about available devices installed on the
     system, such as their settings and capabilities prior to initializing them.
-    
+
     It is recommended that devices are initialized through the device manager rather than
     directly. The device manager is responsible for keeping track of devices and ensuring that
     they are properly closed when the program exits.
@@ -85,7 +85,7 @@ class DeviceManager:
     liaison = None
     ioServer = None  # reference to currently running ioHub ioServer object
     devices = {}  # devices stored
-    deviceAliases = {} # aliases lut to reference devices
+    deviceAliases = {}  # aliases lut to reference devices
     aliases = {}  # aliases to get device classes by
 
     with (__folder__ / "knownDevices.json").open("rb") as f:
@@ -189,7 +189,7 @@ class DeviceManager:
         # import package
         try:
             pkg = importlib.import_module(pkgName)
-        except:
+        except:  # noqa: E722
             raise ModuleNotFoundError(
                 f"Could not find module: {pkgName}"
             )
@@ -314,7 +314,7 @@ class DeviceManager:
         DeviceManager.deviceAliases[alias] = deviceName
 
         return True
-    
+
     @staticmethod
     def registerPID(pid):
         """
@@ -332,7 +332,7 @@ class DeviceManager:
         """
         # register PID
         st.registerPID(pid)
-        
+
         return True
 
     @staticmethod
@@ -372,7 +372,7 @@ class DeviceManager:
             All names by which the device is known to DeviceManager
         """
         # get device object
-        obj = DeviceManager.getDevice(deviceName)
+        obj = DeviceManager.getDevice(deviceName)  # noqa: F841
         # array to store aliases in
         aliases = []
         # iterate through devices
