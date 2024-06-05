@@ -986,7 +986,7 @@ class SettingsComponent:
             "# --- Define some variables which will change depending on pilot mode ---\n"
             "'''\n"
             "To run in pilot mode, either use the run/pilot toggle in Builder, Coder and Runner, \n"
-            "or run the experiment with `--pilot` as an argument. To change what pilot \n#"
+            "or run the experiment with `--pilot` as an argument. To change what pilot \n"
             "mode does, check out the 'Pilot mode' tab in preferences.\n"
             "'''\n"
             "# work out from system args whether we are running in pilot mode\n"
