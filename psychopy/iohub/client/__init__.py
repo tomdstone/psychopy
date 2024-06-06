@@ -33,6 +33,7 @@ getTime = Computer.getTime
 
 _currentSessionInfo = None
 
+
 def windowInfoDict(win):
     windict = dict(handle=win._hw_handle, pos=win.pos, size=win.size,
                    units=win.units, useRetina=win.useRetina, monitor=None)
@@ -42,11 +43,13 @@ def windowInfoDict(win):
                                   distance=win.monitor.getDistance())
     return windict
 
+
 def getFullClassName(klass):
     module = klass.__module__
     if module == 'builtins':
         return klass.__qualname__  # avoid outputs like 'builtins.str'
     return module + '.' + klass.__qualname__
+
 
 class DeviceRPC():
     '''
@@ -64,7 +67,7 @@ class DeviceRPC():
         self.sendToHub = sendToHub
 
     @staticmethod
-    def _returnarg(a): # pragma: no cover
+    def _returnarg(a):  # pragma: no cover
         return a
 
     def __call__(self, *args, **kwargs):
@@ -72,12 +75,12 @@ class DeviceRPC():
         # for the method return value sent back from the ioHub Server.
         r = self.sendToHub(('EXP_DEVICE', 'DEV_RPC', self.device_class,
                             self.method_name, args, kwargs))
-        
+
         if r is None:
             # print("r is None:",('EXP_DEVICE', 'DEV_RPC', self.device_class,
             #                 self.method_name, args, kwargs))
             return None
-        
+
         r = r[1:]
         if len(r) == 1:
             r = r[0]
@@ -108,7 +111,7 @@ class DeviceRPC():
         EVT_TYPE_IX = DeviceEvent.EVENT_TYPE_ID_INDEX
         LOG_EVT = LogEvent.EVENT_TYPE_ID
         toBeLogged = [el for el in r if el[EVT_TYPE_IX] == LOG_EVT]
-        for l in toBeLogged:
+        for l in toBeLogged:  # noqa: E741
             r.remove(l)
             if psycho_logging:
                 ltime = l[self._log_time_index]
@@ -140,7 +143,7 @@ class ioHubDeviceView():
         self.hubClient = hubClient
         self.name = device_config.get('name', device_class_name.lower())
         self.device_class = device_class_name
-        self.device_class_path=device_class_path
+        self.device_class_path = device_class_path
 
         rpc_request = ('EXP_DEVICE', 'GET_DEV_INTERFACE', device_class_name)
         r = self.hubClient._sendToHubServer(rpc_request)
@@ -198,6 +201,7 @@ class ioHubDeviceView():
 
 # pylint: enable=protected-access
 
+
 class ioHubDevices():
     """
     Provides .name access to the ioHub device's created when the ioHub
@@ -226,6 +230,7 @@ class ioHubDevices():
 
     def getNames(self):
         return self._devicesByName.keys()
+
 
 class ioHubConnection():
     """ioHubConnection is responsible for creating, sending requests to, and
@@ -265,9 +270,9 @@ class ioHubConnection():
 
         if ioHubConnection.ACTIVE_CONNECTION is not None:
             raise RuntimeError('An existing ioHubConnection is already open.'
-                                 ' Use ioHubConnection.getActiveConnection() '
-                                 'to access it; or use ioHubConnection.quit() '
-                                 'to close it.')
+                               ' Use ioHubConnection.getActiveConnection() '
+                               'to access it; or use ioHubConnection.quit() '
+                               'to close it.')
         Computer.psychopy_process = psutil.Process()
 
         # udp port setup
@@ -422,14 +427,14 @@ class ioHubConnection():
             self._sendToHubServer(('RPC', 'clearEventBuffer', [True, ]))
             try:
                 self.getDevice('keyboard')._clearLocalEvents()
-            except:
+            except:  # noqa: E722
                 pass
         elif device_label in [None, '', False]:
             self.allEvents = []
             self._sendToHubServer(('RPC', 'clearEventBuffer', [False, ]))
             try:
                 self.getDevice('keyboard')._clearLocalEvents()
-            except:
+            except:  # noqa: E722
                 pass
         else:
             d = self.devices.getDevice(device_label)
@@ -478,10 +483,10 @@ class ioHubConnection():
                               is time stamped when this method is called
                               using the global timer (core.getTime()).
         """
-        self._message_cache.append(MessageEvent._createAsList(text, # pylint: disable=protected-access
-                                             category=category,
-                                             msg_offset=offset,
-                                             sec_time=sec_time))
+        self._message_cache.append(MessageEvent._createAsList(text,  # pylint: disable=protected-access
+                                                              category=category,
+                                                              msg_offset=offset,
+                                                              sec_time=sec_time))
 
     def sendMessageEvents(self, messageList=[]):
         if messageList:
@@ -897,7 +902,7 @@ class ioHubConnection():
         session_info = None
         hub_defaults_config = {}
         rootScriptPath = os.path.dirname(sys.argv[0])
-        if len(rootScriptPath)<=1:
+        if len(rootScriptPath) <= 1:
             rootScriptPath = os.path.abspath(".")
         # >>>>> Load / Create / Update iohub config file.....
         cfpath = os.path.join(IOHUB_DIRECTORY, 'default_config.yaml')
@@ -997,7 +1002,7 @@ class ioHubConnection():
         # >>>>> Create open UDP port to ioHub Server
         server_udp_port = self._iohub_server_config.get('udp_port', 9000)
         from ..net import UDPClientConnection
-        # initially open with a timeout so macOS does not hang.        
+        # initially open with a timeout so macOS does not hang.
         self.udp_client = UDPClientConnection(remote_port=server_udp_port, timeout=0.1)
 
         # If ioHub server does not respond correctly,
@@ -1005,7 +1010,7 @@ class ioHubConnection():
         if self._waitForServerInit() is False:
             self._server_process.terminate()
             return "ioHub startup failed."
-        
+
         # close and reopen blocking version of socket
         self.udp_client.close()
         self.udp_client = UDPClientConnection(remote_port=server_udp_port)
@@ -1067,7 +1072,7 @@ class ioHubConnection():
             if device_config.get('enable', True) is True:
                 try:
                     self._addDeviceView(device_class_name, device_config)
-                except Exception: # pylint: disable=broad-except
+                except Exception:  # pylint: disable=broad-except
                     print2err('_createDeviceList: Error adding class. ')
                     printExceptionDetailsToStdErr()
 
@@ -1120,7 +1125,7 @@ class ioHubConnection():
 
             self.devices.addDevice(name, d)
             return d
-        except Exception: # pylint: disable=broad-except
+        except Exception:  # pylint: disable=broad-except
             print2err('_addDeviceView: Error adding class. ')
             printExceptionDetailsToStdErr()
         return None
@@ -1130,22 +1135,22 @@ class ioHubConnection():
         for k, v in d.items():
             if isinstance(v, bytes):
                 v = str(v, 'utf-8')
-            elif isinstance(v, list) or  isinstance(v, tuple):
+            elif isinstance(v, list) or isinstance(v, tuple):
                 v = self._convertList(v)
             elif isinstance(v, dict):
                 v = self._convertDict(v)
-        
+
             if isinstance(k, bytes):
                 k = str(k, 'utf-8')
-            r[k]=v
+            r[k] = v
         return r
 
-    def _convertList(self, l):
+    def _convertList(self, l):  # noqa: E741
         r = []
         for i in l:
             if isinstance(i, bytes):
                 r.append(str(i, 'utf-8'))
-            elif isinstance(i, list) or  isinstance(i, tuple):
+            elif isinstance(i, list) or isinstance(i, tuple):
                 r.append(self._convertList(i))
             elif isinstance(i, dict):
                 r.append(self._convertDict(i))
@@ -1165,24 +1170,24 @@ class ioHubConnection():
         """
         try:
             # send request to host, return is # bytes sent.
-            #print("SEND:",tx_data)
+            # print("SEND:",tx_data)
             self.udp_client.sendTo(tx_data)
-        except Exception as e: # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             import traceback
             traceback.print_exc()
             self.shutdown()
             raise e
-        
+
         result = None
-        
+
         try:
             # wait for response from ioHub server, which will be the
             # result data and iohub server address (ip4,port).
             result = self.udp_client.receive()
             if result:
                 result, _ = result
-            #print("RESULT:",result)
-        except Exception as e: # pylint: disable=broad-except
+            # print("RESULT:",result)
+        except Exception as e:  # pylint: disable=broad-except
             import traceback
             traceback.print_exc()
             self.shutdown()
@@ -1192,13 +1197,13 @@ class ioHubConnection():
         # TODO: This is not really working as planned, in part because iohub
         #       server does not consistently return error responses when needed
         errorReply = self._isErrorReply(result)
-        if errorReply:           
+        if errorReply:
             raise ioHubError(result)
         # Otherwise return the result
-        
+
         if result is not None:
-            # Use recursive conversion funcs                     
-            if isinstance(result, list) or  isinstance(result, tuple):
+            # Use recursive conversion funcs
+            if isinstance(result, list) or isinstance(result, tuple):
                 result = self._convertList(result)
             elif isinstance(result, dict):
                 result = self._convertDict(result)
@@ -1253,8 +1258,7 @@ class ioHubConnection():
 
         sess_info['user_variables'] = json.dumps(sess_info['user_variables'])
         r = self._sendToHubServer(('RPC', 'createExperimentSessionEntry',
-                                   (sess_info,))
-                                 )
+                                   (sess_info,)))
 
         self.experimentSessionID = r[2]
         sess_info['user_variables'] = org_sess_info
@@ -1277,7 +1281,6 @@ class ioHubConnection():
             return evt_data
         etype = evt_data[DeviceEvent.EVENT_TYPE_ID_INDEX]
         return EventConstants.getClass(etype).createEventAsDict(evt_data)
-
 
     @staticmethod
     def eventListToNamedTuple(evt_data):
@@ -1348,12 +1351,11 @@ class ioHubConnection():
                     return data
                 return False
         else:
-            return data #'Invalid Response Received from ioHub Server'
-
+            return data  # 'Invalid Response Received from ioHub Server'
 
     def _osxKillAndFreePort(self):
         server_udp_port = self._iohub_server_config.get('udp_port', 9000)
-        p = subprocess.Popen(['lsof', '-i:%d'%server_udp_port, '-P'],
+        p = subprocess.Popen(['lsof', '-i:%d' % server_udp_port, '-P'],
                              stdout=subprocess.PIPE,
                              encoding='utf-8')
         lines = p.communicate()[0]
@@ -1368,10 +1370,11 @@ class ioHubConnection():
         try:
             self._shutDownServer()
             ioHubConnection.ACTIVE_CONNECTION = None
-        except Exception: # pylint: disable=broad-except
+        except Exception:  # pylint: disable=broad-except
             pass
 
 ##############################################################################
+
 
 class ioEvent():
     """
@@ -1441,6 +1444,7 @@ class ioEvent():
                                                  self.type,
                                                  self.id)
 
+
 _lazyImports = """
 from psychopy.iohub.client.connect import launchHubServer
 from psychopy.iohub.client import keyboard
@@ -1449,6 +1453,6 @@ from psychopy.iohub.client import wintab
 
 try:
     lazy_import(globals(), _lazyImports)
-except Exception as e: #pylint: disable=broad-except
+except Exception as e:  # pylint: disable=broad-except
     print2err('lazy_import Exception:', e)
-    exec(_lazyImports) #pylint: disable=exec-used
+    exec(_lazyImports)  # pylint: disable=exec-used
