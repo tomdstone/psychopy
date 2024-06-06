@@ -6,6 +6,16 @@ from .. import Device, ioDeviceError
 from ...constants import DeviceConstants, EyeTrackerConstants
 from . import hw
 from ...errors import print2err
+from .eye_events import (  # noqa: F401
+    EyeSampleEvent,
+    MonocularEyeSampleEvent,
+    BinocularEyeSampleEvent,
+    FixationStartEvent,
+    FixationEndEvent,
+    SaccadeStartEvent,
+    SaccadeEndEvent,
+    BlinkStartEvent,
+    BlinkEndEvent)
 
 
 class EyeTrackerDevice(Device):
@@ -210,7 +220,8 @@ class EyeTrackerDevice(Device):
 
         Args:
            message_contents (str):
-               If message_contents is a string, check with the implementations documentation if there are any string length limits.
+               If message_contents is a string, check with the implementations documentation if
+               there are any string length limits.
 
         Kwargs:
            time_offset (float): sec.msec_usec time offset that the time stamp of
@@ -223,10 +234,12 @@ class EyeTrackerDevice(Device):
 
                               Both times should be based on the iohub.devices.Computer.getTime() time base.
 
-                              If time_offset is not supported by the eye tracker implementation being used, a warning message will be printed to stdout.
+                              If time_offset is not supported by the eye tracker implementation being used,
+                              a warning message will be printed to stdout.
 
         Return:
-            (int): EyeTrackerConstants.EYETRACKER_OK, EyeTrackerConstants.EYETRACKER_ERROR, or EyeTrackerConstants.EYETRACKER_INTERFACE_METHOD_NOT_SUPPORTED
+            (int): EyeTrackerConstants.EYETRACKER_OK, EyeTrackerConstants.EYETRACKER_ERROR,
+            or EyeTrackerConstants.EYETRACKER_INTERFACE_METHOD_NOT_SUPPORTED
 
         """
 
@@ -237,7 +250,7 @@ class EyeTrackerDevice(Device):
         The runSetupProcedure method starts the eye tracker calibration
         routine. If calibration_args are provided, they should be used to
         update calibration related settings prior to starting the calibration.
-        
+
         The details of this method are implementation-specific.
 
         .. note::
@@ -304,13 +317,16 @@ class EyeTrackerDevice(Device):
             None
 
         Returns:
-            int: If this method is not supported by the eye tracker interface, EyeTrackerConstants.FUNCTIONALITY_NOT_SUPPORTED is returned.
+            int: If this method is not supported by the eye tracker interface,
+            EyeTrackerConstants.FUNCTIONALITY_NOT_SUPPORTED is returned.
 
             None: If the eye tracker is not currently recording data.
 
-            EyeSample: If the eye tracker is recording in a monocular tracking mode, the latest sample event of this event type is returned.
+            EyeSample: If the eye tracker is recording in a monocular tracking mode, the latest
+            sample event of this event type is returned.
 
-            BinocularEyeSample:  If the eye tracker is recording in a binocular tracking mode, the latest sample event of this event type is returned.
+            BinocularEyeSample:  If the eye tracker is recording in a binocular tracking mode, the
+            latest sample event of this event type is returned.
 
         """
 
@@ -333,7 +349,8 @@ class EyeTrackerDevice(Device):
             None
 
         Returns:
-            int: If this method is not supported by the eye tracker interface, EyeTrackerConstants.EYETRACKER_INTERFACE_METHOD_NOT_SUPPORTED is returned.
+            int: If this method is not supported by the eye tracker interface,
+            EyeTrackerConstants.EYETRACKER_INTERFACE_METHOD_NOT_SUPPORTED is returned.
 
             None: If the eye tracker is not currently recording data or no eye samples have been received.
 
@@ -377,10 +394,12 @@ class EyeTrackerDevice(Device):
         of connected, active, displays on the computer being used.
 
         Args:
-            eyetracker_point (object): eye tracker implementation specific data type representing an x, y position on the calibrated 2D plane (typically a computer display screen).
+            eyetracker_point (object): eye tracker implementation specific data type representing
+            an x, y position on the calibrated 2D plane (typically a computer display screen).
 
         Returns:
-            (x,y): The x,y eye position on the calibrated surface in the current ioHub.devices.Display coordinate type and space.
+            (x,y): The x,y eye position on the calibrated surface in the current ioHub.devices.Display
+            coordinate type and space.
 
         """
         gaze_x = eyetracker_point[0]
@@ -407,11 +426,14 @@ class EyeTrackerDevice(Device):
         Default implementation is to just return the result of self._display_device.display2PixelCoord(...).
 
         Args:
-            display_x (float): The horizontal eye position on the calibrated 2D surface in ioHub.devices.Display coordinate space.
-            display_y (float): The vertical eye position on the calibrated 2D surface in ioHub.devices.Display coordinate space.
+            display_x (float): The horizontal eye position on the calibrated 2D surface in
+            ioHub.devices.Display coordinate space.
+            display_y (float): The vertical eye position on the calibrated 2D surface in
+            ioHub.devices.Display coordinate space.
 
         Returns:
-            (object): eye tracker implementation specific data type representing an x, y position on the calibrated 2D plane (typically a computer display screen).
+            (object): eye tracker implementation specific data type representing an x, y position on the
+            calibrated 2D plane (typically a computer display screen).
 
         """
 
@@ -423,14 +445,3 @@ class EyeTrackerDevice(Device):
         """Do any final cleanup of the eye tracker before the object is
         destroyed."""
         self.__class__._INSTANCE = None
-
-from .eye_events import (
-    EyeSampleEvent,
-    MonocularEyeSampleEvent,
-    BinocularEyeSampleEvent,
-    FixationStartEvent,
-    FixationEndEvent,
-    SaccadeStartEvent,
-    SaccadeEndEvent,
-    BlinkStartEvent,
-    BlinkEndEvent)
