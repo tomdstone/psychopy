@@ -439,7 +439,7 @@ class DeviceManager:
             device.close()
         del DeviceManager.devices[deviceName]
 
-        # Claenup deviceAliases as well
+        # Clean up deviceAliases as well
         for alias in list(DeviceManager.deviceAliases.keys()):
             if deviceName == DeviceManager.deviceAliases[alias]:
                 del DeviceManager.deviceAliases[alias]
