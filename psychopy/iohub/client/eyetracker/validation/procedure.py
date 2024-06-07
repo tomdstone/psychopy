@@ -123,8 +123,9 @@ class TargetStim:
     def innerRadius(self):
         try:
             return self.stim[1].radius
-        except:
+        except:  # noqa: E722
             return self.stim[0].radius
+
 
 def create3PointGrid():
     io = ioHubConnection.getActiveConnection()
@@ -332,7 +333,9 @@ class ValidationProcedure:
         if self.show_intro_screen:
             # Display Validation Intro Screen
             self.showIntroScreen()
-            if self.terminate_key and self.terminate_key in keyboard.waitForReleases(keys=[' ', 'space',self.terminate_key]):
+            if self.terminate_key and self.terminate_key in keyboard.waitForReleases(keys=[' ',
+                                                                                           'space',
+                                                                                           self.terminate_key]):
                 print("Escape key pressed. Exiting validation")
                 self._validation_results = None
                 return
@@ -350,7 +353,8 @@ class ValidationProcedure:
 
         if self.show_results_screen:
             self.showResultsScreen()
-            kb_presses = keyboard.waitForPresses(keys=['space',' ', self.terminate_key, self.targetsequence.gaze_cursor_key])
+            kb_presses = keyboard.waitForPresses(keys=['space', ' ', self.terminate_key,
+                                                       self.targetsequence.gaze_cursor_key])
             while 'space' not in kb_presses and ' ' not in kb_presses:
                 if self.targetsequence.gaze_cursor_key in kb_presses:
                     self.targetsequence.display_gaze = not self.targetsequence.display_gaze
@@ -380,8 +384,8 @@ class ValidationProcedure:
             self.intro_text_stim.setPos(textpos)
         else:
             self.intro_text_stim = visual.TextStim(self.win, text=text, pos=textpos, height=30, color=self.text_color,
-                                                   colorSpace=self.text_color_space, opacity=1.0, contrast=1.0, units='pix',
-                                                   ori=0.0, antialias=True, bold=False, italic=False,
+                                                   colorSpace=self.text_color_space, opacity=1.0, contrast=1.0,
+                                                   units='pix', ori=0.0, antialias=True, bold=False, italic=False,
                                                    anchorHoriz='center', anchorVert='center',
                                                    wrapWidth=self.win.size[0] * .8)
 
@@ -541,15 +545,15 @@ class ValidationProcedure:
             # Dictionary of the different levels of samples selected during filtering
             # for valid samples to use in accuracy calculations.
             sample_msg_data_filtering = dict(all_samples=samplesforpos,  # All samples from target period.
-                                                    # Sample during stationary period at end of target
-                                                    # presentation display.
-                                                    stationary_samples=stationary_samples,
-                                                    # Samples that occurred within the
-                                                    # defined time selection period.
-                                                    time_filtered_samples=all_samples_in_period,
-                                                    # Samples from the selection period that
-                                                    # do not have missing data
-                                                    used_samples=good_samples_in_period)
+                                             # Sample during stationary period at end of target
+                                             # presentation display.
+                                             stationary_samples=stationary_samples,
+                                             # Samples that occurred within the
+                                             # defined time selection period.
+                                             time_filtered_samples=all_samples_in_period,
+                                             # Samples from the selection period that
+                                             # do not have missing data
+                                             used_samples=good_samples_in_period)
 
             position_results = dict(index=pindex,
                                     target_position=target_positions_used[pindex],
@@ -645,7 +649,7 @@ class ValidationProcedure:
     def _generateImageName(self):
         import datetime
         file_name = 'validation_' + datetime.datetime.now().strftime('%d_%m_%Y_%H_%M') + '.png'
-        #if self.save_results_screen:
+        # if self.save_results_screen:
         #    return normjoin(self.save_results_screen, file_name)
         rootScriptPath = os.path.dirname(sys.argv[0])
         return normjoin(rootScriptPath, file_name)
@@ -666,12 +670,14 @@ class ValidationProcedure:
                     ' Mean %.4f (%s units)' % (results['min_error'], results['max_error'],
                                                results['mean_error'], results['reporting_unit_type'])
         title_stim = visual.TextStim(self.win, text=title_txt, height=24, pos=(0.0, (self.win.size[1] / 2.0) * .95),
-                                     color=self.text_color, colorSpace=self.text_color_space, units='pix', antialias=True,
+                                     color=self.text_color, colorSpace=self.text_color_space, units='pix',
+                                     antialias=True,
                                      anchorVert='center', anchorHoriz='center', wrapWidth=self.win.size[0] * .8)
         title_stim.draw()
 
         exit_text = visual.TextStim(self.win, text='Press SPACE to continue.', opacity=1.0, units='pix', height=None,
-                                    pos=(0.0, -(self.win.size[1] / 2.0) * .95), color=self.text_color, colorSpace=self.text_color_space,
+                                    pos=(0.0, -(self.win.size[1] / 2.0) * .95), color=self.text_color,
+                                    colorSpace=self.text_color_space,
                                     antialias=True, bold=True, anchorVert='center', anchorHoriz='center',
                                     wrapWidth=self.win.size[0] * .8)
         exit_text.draw()
@@ -687,7 +693,7 @@ class ValidationProcedure:
             sample_gfx_radius = deg2pix(0.33, self.win.monitor, correctFlat=False)
             if self.results_in_degrees:
                 sample_gfx_radius = 0.33
-                utype='deg'
+                utype = 'deg'
             sample_gfx = visual.Circle(self.win, radius=sample_gfx_radius, fillColor=color, lineColor=[1, 1, 1],
                                        lineWidth=1, edges=64, units=utype, colorSpace='rgb', opacity=0.66,
                                        interpolate=True, autoLog=False)
@@ -935,7 +941,7 @@ class ValidationTargetRenderer:
             start_radius = self.target.radius
             try:
                 stop_radius = self.target.innerRadius
-            except:
+            except:  # noqa: E722
                 stop_radius = start_radius/2
                 print("Warning: validation target has no .innerRadius property.")
             while fliptime < contractedtime:
@@ -1094,7 +1100,7 @@ class ValidationTargetRenderer:
                 turn_rec_off.append(d)
 
         sleep(0.025)
-        initialsize=self.target.radius
+        initialsize = self.target.radius
         for pos in self.positions:
             self._initTargetData(prevpos, pos)
             self._addDeviceEvents()
