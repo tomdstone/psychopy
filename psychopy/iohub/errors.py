@@ -8,18 +8,18 @@ import traceback
 
 def print2err(*args):
     """
-    Note: As of at least Jan-2020, this function seems to 
-    cause iohub to fail to start if the script is started from Coder. 
-    try: except: at least stops whatever is crashing, 
-    (Appears to be use of sys.stderr.write) but prints() do not appear in 
-    Coder Console. Not sure how to get iohub process prints to 
+    Note: As of at least Jan-2020, this function seems to
+    cause iohub to fail to start if the script is started from Coder.
+    try: except: at least stops whatever is crashing,
+    (Appears to be use of sys.stderr.write) but prints() do not appear in
+    Coder Console. Not sure how to get iohub process prints to
     appear in Builder Console...??? Issue is specific to running script from Coder.
-    
+
     Using the standard python print() function from the iohub server process
     will not print anything to the psychopy process stdout. Use print2err
     for this purpose. Each element of *args is unicode formatted and then
     written to sys.stderr.
-    
+
     :param args: 0 to N objects of any type.
     """
     try:
@@ -27,11 +27,12 @@ def print2err(*args):
             sys.stderr.write("{0}".format(a))
         sys.stderr.write("\n")
         sys.stderr.flush()
-    except:
+    except:  # noqa: E722
         for a in args:
             print("{0}".format(a))
         print()
-        	
+
+
 def printExceptionDetailsToStdErr():
     """
     Print the last raised exception in the iohub (well, calling) process
@@ -40,11 +41,12 @@ def printExceptionDetailsToStdErr():
     try:
         traceback.print_exc(file=sys.stderr)
         sys.stderr.flush()
-    except:
+    except:  # noqa: E722
         traceback.print_exc()
 
+
 class ioHubError(Exception):
-    #TODO: Fix the way exceptions raised in the iohub process are handled
+    # TODO: Fix the way exceptions raised in the iohub process are handled
     #      and reported to the psychopy process.
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args)
