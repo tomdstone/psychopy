@@ -648,7 +648,7 @@ class ValidationProcedure:
         #if self.save_results_screen:
         #    return normjoin(self.save_results_screen, file_name)
         rootScriptPath = os.path.dirname(sys.argv[0])
-        return normjoin(rootScriptPath, file_name)
+        return normjoin(rootScriptPath, 'data', file_name)
 
     def drawResultScreen(self):
         """
