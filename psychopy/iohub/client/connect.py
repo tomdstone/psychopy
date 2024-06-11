@@ -116,7 +116,7 @@ def launchHubServer(**kwargs):
             session_info['code'] = session_code
     elif session_code:
         session_info = dict(code=session_code)
-    else:        
+    else:
         session_info = {}
 
     if experiment_code and not session_code:
@@ -217,7 +217,7 @@ def launchHubServer(**kwargs):
     # Add Display device as first in list of devices to be sent to iohub
     device_list.append(dict(Display=display_config))
 
-    # Ensure a Experiment, Keyboard, and Mouse Devices have been defined.
+    # Ensure Experiment, Keyboard, and Mouse Devices have been defined.
     # If not, create them.
     check_for_devs = ['Experiment', 'Keyboard', 'Mouse']
     for adev_name in check_for_devs:
@@ -226,7 +226,7 @@ def launchHubServer(**kwargs):
         else:
             device_list.append({adev_name: device_dict[adev_name]})
             del device_dict[adev_name]
-    
+
     iohub_config = dict()
     def_ioconf = readConfig(os.path.join(IOHUB_DIRECTORY, u'default_config.yaml'))
     # Add remaining defined devices to the device list.
@@ -236,7 +236,7 @@ def launchHubServer(**kwargs):
             iohub_config[class_name] = device_config
         else:
             device_list.append({class_name: device_config})
-            
+
     # Create an ioHub configuration dictionary.
     iohub_config['monitor_devices'] = device_list
 
