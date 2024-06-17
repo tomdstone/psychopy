@@ -340,7 +340,12 @@ class Experiment:
             if self_copy.settings.params['Show info dlg'].val:
                 # Only show exp info dlg if indicated to by settings
                 code += (
+                "    from copy import deepcopy\n"
+                "    import re\n"
+                "    defaultInfo = deepcopy(expInfo)\n"
                 "    expInfo = showExpInfoDlg(expInfo=expInfo)\n"
+                "    while not re.match('^\d{2}$', expInfo['session']) or not re.match('^DRGN\d{3}$', expInfo['participant']):\n"
+                "        expInfo = showExpInfoDlg(expInfo=deepcopy(defaultInfo))\n"
                 )
             code += (
                 "    thisExp = setupData(expInfo=expInfo)\n"
