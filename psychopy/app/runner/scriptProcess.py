@@ -317,6 +317,53 @@ class ScriptProcess:
                 self.expCtrl.Select(itemIdx)
                 self.toolbar.buttons['runBtn'].Disable()
 
+        # AlexHe's code to copy over last_app_load.log
+        from psychopy.preferences import prefs
+        prefLogFilePath = os.path.join(prefs.paths['userPrefsDir'], 'last_app_load.log')
+        if os.path.exists(prefLogFilePath):
+            # Define the target string to search for
+            target_string = 'target_last_app_load_log_file:'
+            target_last_app_load_file = None
+            # Open the log file for reading
+            with open(prefLogFilePath, 'r') as log_file:
+                # Iterate through each line in the log file
+                for line in log_file:
+                    # Check if the target string is in the current line
+                    if target_string in line:  # the latest line with the target string will be used
+                        # Extract the rest of the line after the target string
+                        target_last_app_load_file = line.split(target_string, 1)[-1].strip()
+            if target_last_app_load_file:
+                # Check for filename conflict and accumulate a counter
+                counter = 0
+                original_filename = target_last_app_load_file
+                filename_conflict = os.path.exists(original_filename)
+                while filename_conflict:
+                    counter += 1
+                    target_last_app_load_file = original_filename.replace(
+                        'last_app_load.log',
+                        f'{counter}_last_app_load.log')
+                    filename_conflict = os.path.exists(target_last_app_load_file)
+                # If the experiment did not start, modify the filename to reflect that
+                if not os.path.exists(target_last_app_load_file.split('_last_app_load', 1)[0] + '.psydat'):
+                    # counter must be > 0 otherwise we wouldn't enter the "if target_last_app_load_file" block
+                    target_last_app_load_file = target_last_app_load_file.replace(
+                        f'{counter}_last_app_load.log',
+                        f'{counter - 1}_last_app_load_not_started.log')
+                    # Need to again check for filename conflict
+                    counter = 0
+                    original_filename = target_last_app_load_file
+                    filename_conflict = os.path.exists(original_filename)
+                    while filename_conflict:
+                        counter += 1
+                        target_last_app_load_file = original_filename.replace('.log', f'_{counter}.log')
+                        filename_conflict = os.path.exists(target_last_app_load_file)
+                # Copy the last_app_load.log file to the target location
+                import shutil
+                shutil.copy(prefLogFilePath, target_last_app_load_file)
+                logging.info(f"Successfully copied {prefLogFilePath} to {target_last_app_load_file}")
+        else:
+            logging.error(f"Could not find last_app_load.log at {prefLogFilePath}")
+
         def _focusOnOutput(win):
             """Subroutine to focus on a given output window."""
             win.Show()
