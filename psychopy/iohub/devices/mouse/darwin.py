@@ -208,7 +208,7 @@ class Mouse(MouseDevice):
                 logged_time = currentSec()
 
                 if etype == Qz.kCGEventTapDisabledByTimeout:
-                    print2err('** WARNING: Mouse Tap Disabled due to timeout. Re-enabling....: ', etype)
+                    # print2err('** WARNING: Mouse Tap Disabled due to timeout. Re-enabling....: ', etype)
                     Qz.CGEventTapEnable(self._tap, True)
                     return event
                 else:
