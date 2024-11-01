@@ -344,7 +344,7 @@ class Experiment:
                 "    import re\n"
                 "    defaultInfo = deepcopy(expInfo)\n"
                 "    expInfo = showExpInfoDlg(expInfo=expInfo)\n"
-                "    while not re.match('^\d{2}$', expInfo['session']) or not re.match('^DRGN\d{3}$', expInfo['participant']):\n"
+                "    while not re.match('^\d{2}$', expInfo['session']):\n"
                 "        expInfo = showExpInfoDlg(expInfo=deepcopy(defaultInfo))\n"
                 )
             code += (
