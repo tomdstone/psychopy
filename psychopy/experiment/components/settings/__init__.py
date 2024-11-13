@@ -1455,11 +1455,11 @@ class SettingsComponent:
             # Alert user if no monitor config
             if self.params['Monitor'].val in ["", None, "None"]:
                 alert(code=4545)
-            # Alert user if they need calibration and don't have it
-            if not self.params['eyetracker'].val in ["MouseGaze", "Pupil Labs (Neon)"]:
-                if not any(isinstance(rt, EyetrackerCalibrationRoutine)
-                           for rt in self.exp.flow):
-                    alert(code=4510, strFields={"eyetracker": self.params['eyetracker'].val})
+            # # Alert user if they need calibration and don't have it
+            # if not self.params['eyetracker'].val in ["MouseGaze", "Pupil Labs (Neon)"]:
+            #     if not any(isinstance(rt, EyetrackerCalibrationRoutine)
+            #                for rt in self.exp.flow):
+            #         alert(code=4510, strFields={"eyetracker": self.params['eyetracker'].val})
 
             # Write code
             code = (
