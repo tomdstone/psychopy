@@ -385,7 +385,7 @@ class TrialHandler(_BaseLoopHandler):
                         "    dataOut=['n','all_mean','all_std', 'all_raw'])\n")
                 buff.writeIndentedLines(code % self.params)
             if saveCSV:
-                code = ("%(name)s.saveAsText(filename + '%(name)s.csv', "
+                code = ("%(name)s.saveAsText(filename + '_%(name)s.csv', "
                         "delim=',',\n"
                         "    stimOut=params,\n"
                         "    dataOut=['n','all_mean','all_std', 'all_raw'])\n")
@@ -574,7 +574,7 @@ class StairHandler(_BaseLoopHandler):
                 buff.writeIndented(code % self.params)
             if self.exp.settings.params['Save csv file'].val:
                 code = ("%(name)s.saveAsText(filename + "
-                        "'%(name)s.csv', delim=',')\n")
+                        "'_%(name)s.csv', delim=',')\n")
                 buff.writeIndented(code % self.params)
 
     def getType(self):
@@ -833,7 +833,7 @@ class MultiStairHandler(_BaseLoopHandler):
                 code = "%(name)s.saveAsExcel(filename + '.xlsx')\n"
                 buff.writeIndented(code % self.params)
             if self.exp.settings.params['Save csv file'].val:
-                code = ("%(name)s.saveAsText(filename + '%(name)s.csv', "
+                code = ("%(name)s.saveAsText(filename + '_%(name)s.csv', "
                         "delim=',')\n")
                 buff.writeIndented(code % self.params)
 
