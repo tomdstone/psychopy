@@ -346,9 +346,13 @@ class ScriptProcess:
                 # If the experiment did not start, modify the filename to reflect that
                 if not os.path.exists(target_last_app_load_file.split('_last_app_load', 1)[0] + '.psydat'):
                     # counter must be > 0 otherwise we wouldn't enter the "if target_last_app_load_file" block
+                    modified_counter = counter - 1
+                    if modified_counter == 0:
+                        replace_str = '_last_app_load_not_started.log'
+                    else:
+                        replace_str = f'{modified_counter}_last_app_load_not_started.log'
                     target_last_app_load_file = target_last_app_load_file.replace(
-                        f'{counter}_last_app_load.log',
-                        f'{counter - 1}_last_app_load_not_started.log')
+                        f'{counter}_last_app_load.log', replace_str)
                     # Need to again check for filename conflict
                     counter = 0
                     original_filename = target_last_app_load_file
